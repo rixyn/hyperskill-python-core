@@ -13,6 +13,8 @@ class Student:
 
 
 def is_valid_name(name):
+    if len(name) < 2:
+        return None
     pattern = r"^[A-Za-z]+([-' ][A-Za-z]+)*$"
     return re.match(pattern, name) is not None
 
@@ -28,7 +30,7 @@ def process_student_credentials(credentials):
     parts = credentials.split()
 
     if len(parts) <= 2:
-        return "Incorrect credentials."
+        return "Incorrect credentials"
 
     first_name = parts[0]
     parts.remove(first_name)
@@ -62,10 +64,9 @@ def main():
             print("Bye!")
             break
         elif command == "add students":
+            print("Enter student credentials or 'back' to return: ")
             while True:
-                credentials = input(
-                    "Enter student credentials or 'back' to return: ").strip()
-                # credentials = input().strip()
+                credentials = input().strip()
                 if credentials.lower() == 'back':
                     print(f"Total {student_count} students have been added.")
                     break
