@@ -65,6 +65,7 @@ def main():
             while True:
                 credentials = input(
                     "Enter student credentials or 'back' to return: ").strip()
+                # credentials = input().strip()
                 if credentials.lower() == 'back':
                     print(f"Total {student_count} students have been added.")
                     break
