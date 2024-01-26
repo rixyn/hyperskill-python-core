@@ -169,7 +169,7 @@ def display_course_statistics():
     print("Hardest course:", ", ".join(hardest_course) or "n/a")
 
 
-def display_course_details(course_name, stats):
+def display_course_details(course_name):
     print(course_name)
     print("id\t\tpoints\t\tcompleted")
     for student_id, student in students.items():
@@ -241,11 +241,13 @@ def main():
         elif command == "statistics":
             display_course_statistics()
             while True:
-                course_input = input().strip()
+                course_input = input().lower().strip()
                 if course_input.lower() == 'back':
                     break
-                elif course_input in ["Python", "DSA", "Databases", "Flask"]:
-                    display_course_details(course_input)
+                elif course_input in ["python", "databases", "flask"]:
+                    display_course_details(course_input.capitalize())
+                elif course_input == "dsa":
+                    display_course_details("DSA")
                 else:
                     print("Unknown course.")
         else:
