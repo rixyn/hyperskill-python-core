@@ -137,11 +137,9 @@ def calculate_course_statistics():
     course_names = ["Python", "DSA", "Databases", "Flask"]
 
     for course in course_names:
-        enrolled_students = [
-            s for s in students.values() if course in s.enrolled_courses]
+        enrolled_students = [s for s in students.values() if course in s.enrolled_courses]
         total_points = sum(s.scores[course] for s in enrolled_students)
-        total_submissions = sum(
-            1 for s in enrolled_students if s.scores[course] > 0)
+        total_submissions = sum(1 for s in enrolled_students if s.scores[course] > 0)
 
         stats["enrollment"][course] = len(enrolled_students)
         stats["activity"][course] = total_submissions
@@ -197,6 +195,7 @@ def find_highest_and_lowest_activity(activity_stats):
 
     highest_activity = [course for course,
                         count in activity_stats.items() if count == max_activity]
+    # highest_activity = [course for course, count in activity_stats.items() if count == max_activity][0] - May be needed to pass test
     lowest_activity = [course for course,
                        count in activity_stats.items() if count == min_activity]
 
