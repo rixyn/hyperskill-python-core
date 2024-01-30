@@ -74,7 +74,7 @@ def add_student(first_name, last_name, email):
     student = Student(next_student_id, first_name, last_name, email)
     students[next_student_id] = student
     emails.add(email)
-    student_id = next_student_id
+    # student_id = next_student_id
     next_student_id += 1
     return f"The student has been added."
 
