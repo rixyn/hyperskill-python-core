@@ -1,6 +1,11 @@
+import sys
+import os
 import unittest
-from stage2 import Student, is_valid_name, is_valid_email, main
 from unittest.mock import patch
+# Add the parent directory to the system path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from stage2 import Student, is_valid_name, is_valid_email, main
+
 
 
 class TestStudent(unittest.TestCase):
