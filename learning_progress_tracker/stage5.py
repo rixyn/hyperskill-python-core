@@ -1,3 +1,12 @@
+""" Hyperskill: Learning Progress Tracker (Python)
+Stage 5/5:  Notification service 
+Difficulty: Medium
+Track:      Python Core
+Author:     Rixyn
+Completed:  2024-01-30
+"""
+
+
 import re
 
 # Global variables
@@ -18,11 +27,15 @@ class Student:
         self.email = email
         self.scores = {"Python": 0, "DSA": 0, "Databases": 0, "Flask": 0}
         self.enrolled_courses = set()
+        self.completed_courses = set()  # New attribute to store completed courses
+        self.acknowledged_courses = set()  # New attribute to store acknowledged courses
 
     def update_scores(self, course, points):
         if points > 0:
             self.enrolled_courses.add(course)
         self.scores[course] += points
+        if self.scores[course] >= course_requirements[course]:
+            self.completed_courses.add(course)
 
     def __repr__(self):
         return f"Student(ID={self.student_id}, first_name='{self.first_name}', last_name='{self.last_name}', email='{self.email}')"
@@ -252,6 +265,23 @@ def find_easiest_and_hardest_course(average_score_stats):
     return easiest_course, hardest_course
 
 
+def send_notifications():
+    notified_students = []
+    for student in students.values():
+        for course in student.completed_courses:
+            if course not in student.acknowledged_courses:
+                # Generate notification only if the student has completed the course
+                if student.scores[course] >= course_requirements[course]:
+                    print(
+                        f"To: {student.email}\nRe: Your Learning Progress\nHello, {student.first_name} {student.last_name}! You have accomplished our {course} course!")
+                    student.acknowledged_courses.add(course)
+                    notified_students.append(student.student_id)
+
+    notification_count = len(set(notified_students))
+
+    print(f"Total {notification_count} {'students' if notification_count > 1 else 'student'} have been notified.")
+
+
 def main():
     print("Learning Progress Tracker")
 
@@ -289,6 +319,8 @@ def main():
                     print("Unknown course.")
         elif command == "back":
             print("Enter 'exit' to exit the program")
+        elif command == "notify":
+            send_notifications()
         elif command == "":
             print("No input")
         else:
