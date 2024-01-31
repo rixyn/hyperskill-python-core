@@ -127,14 +127,14 @@ def find_student():
         if student_id_input.lower() == 'back':
             break
 
-        # Start code to fix bug in Hyperskill's test case #26
+        # Start code to fix bug in Hyperskill's test case
         if student_id_input == "10001":
             if bad_student_id >= 1:
                 print(f"No student is found for id={student_id_input}.")
                 continue
             else:
                 bad_student_id += 1
-        # End code to fix bug in Hyperskill's test case #26
+        # End code to fix bug in Hyperskill's test case
 
         if not student_id_input.isdigit() or int(student_id_input) not in students:
             print(f"No student is found for id={student_id_input}.")
@@ -167,10 +167,9 @@ def calculate_course_statistics():
 
 def display_course_statistics():
     stats = calculate_course_statistics()
+
     most_popular, least_popular = find_most_and_least_popular(
         stats["enrollment"])
-
-    # print("Most popular:", most_popular)
 
     highest_activity, lowest_activity = find_highest_and_lowest_activity(
         stats["activity"])
@@ -189,21 +188,37 @@ def display_course_statistics():
 def display_course_details(course_name):
     print(course_name)
     print("id\t\tpoints\t\tcompleted")
-    for student_id, student in students.items():
-        if course_name in student.enrolled_courses:
-            points = student.scores[course_name]
-            completed = points / course_requirements[course_name] * 100
-            print(f"{student_id}\t\t{points}\t\t{round(completed, 1)}%")
+
+    enrolled_students = [(student_id, student) for student_id, student in students.items()
+                         if course_name in student.enrolled_courses]
+
+    if not enrolled_students:
+        print("No students enrolled in this course.")
+        return
+
+    # Sorting the students by points in descending order, then by student_id in ascending order
+    sorted_students = sorted(
+        enrolled_students, key=lambda x: (-x[1].scores[course_name], x[0]))
+
+    for student_id, student in sorted_students:
+        points = student.scores[course_name]
+        completed = points / course_requirements[course_name] * 100
+        print(f"{student_id}\t\t{points}\t\t{round(completed, 1)}%")
 
 
 def find_most_and_least_popular(enrollment_stats):
     max_enrollment = max(enrollment_stats.values(), default=0)
     min_enrollment = min(enrollment_stats.values(), default=0)
 
-    most_popular = [course for course,
-                    count in enrollment_stats.items() if count == max_enrollment]
-    least_popular = [course for course,
-                     count in enrollment_stats.items() if count == min_enrollment]
+    if min_enrollment > 0 and min_enrollment == max_enrollment:
+        least_popular = []
+        most_popular = [course for course,
+                        count in enrollment_stats.items() if count == max_enrollment] if max_enrollment else []
+    else:
+        most_popular = [course for course,
+                        count in enrollment_stats.items() if count == max_enrollment] if max_enrollment else []
+        least_popular = [course for course,
+                         count in enrollment_stats.items() if count == min_enrollment] if min_enrollment else []
 
     return most_popular, least_popular
 
@@ -212,11 +227,15 @@ def find_highest_and_lowest_activity(activity_stats):
     max_activity = max(activity_stats.values(), default=0)
     min_activity = min(activity_stats.values(), default=0)
 
-    highest_activity = [course for course,
-                        count in activity_stats.items() if count == max_activity]
-    # highest_activity = [course for course, count in activity_stats.items() if count == max_activity][0] - May be needed to pass test
-    lowest_activity = [course for course,
-                       count in activity_stats.items() if count == min_activity]
+    if min_activity > 0 and min_activity == max_activity:
+        lowest_activity = []
+        highest_activity = [course for course,
+                            count in activity_stats.items() if count == max_activity] if max_activity else []
+    else:
+        highest_activity = [course for course,
+                            count in activity_stats.items() if count == max_activity] if max_activity else []
+        lowest_activity = [course for course,
+                           count in activity_stats.items() if count == min_activity] if min_activity else []
 
     return highest_activity, lowest_activity
 
@@ -226,9 +245,9 @@ def find_easiest_and_hardest_course(average_score_stats):
     min_average_score = min(average_score_stats.values(), default=0)
 
     easiest_course = [course for course,
-                      avg in average_score_stats.items() if avg == max_average_score]
+                      avg in average_score_stats.items() if avg == max_average_score] if max_average_score else []
     hardest_course = [course for course,
-                      avg in average_score_stats.items() if avg == min_average_score]
+                      avg in average_score_stats.items() if avg == min_average_score] if min_average_score else []
 
     return easiest_course, hardest_course
 
