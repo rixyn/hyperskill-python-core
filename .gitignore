@@ -161,3 +161,4 @@ cython_debug/
 
 scratch.ipynb
 .scratch
+.vscode/
