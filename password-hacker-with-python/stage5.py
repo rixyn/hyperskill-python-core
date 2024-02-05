@@ -1,3 +1,12 @@
+""" Hyperskill: Password Hacker with Python
+Stage 5/5:  Time-based vulnerability
+Difficulty: Hard (Graduate Project)
+Track:      Python Core
+Author:     Rixyn
+Completed:  2024-02-04
+"""
+
+
 import socket
 import sys
 import json
